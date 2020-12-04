@@ -53,7 +53,14 @@ const Index = (props) =>{
             <Toolbar></Toolbar>
           </Graphin>
         </div>
-        <div className="kno-map-text"></div>
+        <div className="kno-map-text">
+          <div className="kno-map-text-title">Title
+          <div className="kno-map-text-description">Description</div>
+          </div>
+          <div className="kno-map-text-context">
+            balabala
+            </div>
+        </div>
       </main>
   </div>
   )
