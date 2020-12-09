@@ -1,0 +1,46 @@
+@import '~antd/dist/antd.css';
+
+body{
+    background-color: rgb(243, 243, 243);
+}
+
+
+.container{
+    width: 80%;
+    height: 600px;
+    background-color: white;
+    margin: 20px auto;
+    box-shadow: inset;
+    border-radius: 3px;
+    padding: 40px;
+}
+
+.title{
+    color: rgb(111, 173, 49);
+    font-size: 20px;
+}
+
+.context{
+    margin: 20px 0;
+}
+
+.filter{
+    margin-left: 20px;
+    display: inline-block;
+    width:900px;
+}
+
+.select{
+    display: inline-block;
+    width: 120px;
+}
+
+.result{
+    margin: 0 auto;
+    width: 80%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}

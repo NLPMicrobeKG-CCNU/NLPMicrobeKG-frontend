@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Index from './pages/test';
+import Index from './pages/explore microbes/index';
 
 ReactDOM.render(
   <React.StrictMode>
