@@ -1,3 +1,4 @@
+import React ,{useState,useEffect}from 'react';
 import './index.css';
 import Header from'../../component/header';
 import Footer from '../../component/footer'
@@ -8,8 +9,35 @@ import '@antv/graphin/dist/index.css'; // Graphin CSS
 import '@antv/graphin-components/dist/index.css'; // Graphin 组件 CSS
 
 
-const Index = (props) =>{
-  const data = Utils.mock(10).circle().graphin();
+const Visualization = (props) =>{
+
+  const [data, setData] = useState({
+    nodes: [],
+    edges: [],
+});
+  useEffect(() => {
+    setData({
+      nodes:[
+        {
+          id: "1",
+          data : {
+            id: "1",
+            label: "155"
+          },
+          label: "155"
+        },
+        {
+          id: "2",
+          data : {
+            id: "2",
+            label: "122"
+          },
+          label: "122"
+        },],
+      edges:[{data:{label:"12"},source:"1",target:"2",label:"123"}],
+    })
+  },[]);
+
   const {Search} = Input
   return(
     <div className="body">
@@ -30,7 +58,7 @@ const Index = (props) =>{
           </div>
         </div>
         <div className="kno-map-graphin">
-          <Graphin data={data}>
+          <Graphin data={data} >
             <Toolbar></Toolbar>
           </Graphin>
         </div>
@@ -48,4 +76,4 @@ const Index = (props) =>{
   )
 }
 
-export default Index;
+export default Visualization;

@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Index from './pages/explore microbes/index';
+import Visualization from './pages/visualization/index';
+import Explore from './pages/explore microbes/index';
+import { BrowserRouter , Route, Link} from "react-router-dom";
 
 ReactDOM.render(
+  <BrowserRouter>
   <React.StrictMode>
-    <Index />
-  </React.StrictMode>,
+    <Route path ="/visualization" component={Visualization} />
+    <Route path ="/explore" component={Explore} />
+  </React.StrictMode>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

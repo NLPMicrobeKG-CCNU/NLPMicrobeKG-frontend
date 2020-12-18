@@ -3,7 +3,7 @@ import { Input , Select} from 'antd';
 import Header from '../../component/header'
 import Footer from '../../component/footer'
 
-const Index =()=>{
+const Explore =()=>{
     const {Search} = Input
     const {Option} = Select
     return (
@@ -13,9 +13,9 @@ const Index =()=>{
                 <div className="container">
                     <div className="title">EXPLORE PETIDES</div>
                     <div className="context">balabala</div>
-                    <Select defaultValue="Organism" className="select" >
-                        <Option value="Organism">Organism</Option>
-                        <Option value="Other">Other</Option>
+                    <Select defaultValue="Text Mining" className="select" >
+                        <Option value="Text Mining">Text Mining</Option>
+                        <Option value="Data fusion">Data fusion</Option>
                     </Select>
                     <Search className="filter" 
                     placeholder="Enter a filter term"
@@ -30,4 +30,4 @@ const Index =()=>{
     )
 }
 
-export default Index;
+export default Explore;
