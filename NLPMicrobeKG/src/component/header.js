@@ -7,10 +7,10 @@ const Header = () =>{
         <div className="header-container">
           <div className="header-title">NLPMicrobeKG</div>
           <div className="header-content">
-            <Link to ="/" className="link"><div className="Home margin">Home </div></Link>
+            <Link to ="/home" className="link"><div className="Home margin">Home </div></Link>
             <Link to ="/explore" className="link"><div className="Explore margin">Explore Microbes </div></Link>
             <Link to ="/visualization" className="link"><div className="Visualization margin">Visualization</div></Link>
-            <div className="contact margin">Contact us </div>
+            <Link to ="/contact" className="link"><div className="contact margin">Contact us </div></Link>
           </div>
         </div>
       </header>

@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Visualization from './pages/visualization/index';
 import Explore from './pages/explore microbes/index';
-import { BrowserRouter , Route, Link} from "react-router-dom";
+import Home from './pages/home/index';
+import Contact from './pages/contact us/index';
+import { BrowserRouter , Route} from "react-router-dom";
 
 ReactDOM.render(
   <BrowserRouter>
   <React.StrictMode>
+    <Route path="/home" component={Home} />
     <Route path ="/visualization" component={Visualization} />
     <Route path ="/explore" component={Explore} />
+    <Route path ="/contact" component={Contact} />
   </React.StrictMode>
   </BrowserRouter>,
   document.getElementById('root')
