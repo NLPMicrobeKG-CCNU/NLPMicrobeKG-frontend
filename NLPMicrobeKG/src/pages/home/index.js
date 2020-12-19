@@ -1,9 +1,11 @@
 import Header from'../../component/header';
-import Footer from '../../component/footer'
+import Footer from '../../component/footer';
+import logo from './img/logo.jpg';
 import './index.css';
 
 const Home = () => {
-    return (<div className="body">
+    return (
+    <div className="body">
     <Header />
     <div className="main1">
     <div className="up">
@@ -40,7 +42,7 @@ const Home = () => {
             </div>
             <div className="mid">
             <div className="mid-left">
-                <img src="/img/logo.jpg" alt="logo"  className="img" />
+                <img src={logo} alt="logo"  className="img" />
             </div>
             <div className="mid-right">
                 <div className="mid-right-1">
@@ -57,7 +59,8 @@ const Home = () => {
             </div>
         </div>
         <Footer />
-        </div>)
+        </div>
+        )
 }
 
 export default Home;
