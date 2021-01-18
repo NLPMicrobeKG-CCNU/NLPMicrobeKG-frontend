@@ -1,5 +1,5 @@
 const Fetch = (url, method) => {
-    const preHttp = "/api/v1/";
+    const preHttp = "http://10.102.64.53:1203/api/v1/";
     return fetch(
       preHttp + url,
       {
@@ -7,8 +7,9 @@ const Fetch = (url, method) => {
           "content-type": "application/json",
         },
         credentials: "same-origin",
+        method
       },
-      method
+      
     )
       .then((response) => response.json())
       .then((response) => {
