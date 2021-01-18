@@ -12,20 +12,19 @@ import '@antv/graphin-components/dist/index.css'; // Graphin 组件 CSS
 
 const switch_color = (number) => {
   switch (number) {
-    case 0: return 'red';
-    case 1: return 'lightgreen';
-    case 2: return 'lightblue';
-    case 3: return 'purple';
-    case 4: return 'orange';
-    case 5: return 'yellow';
-    case 6: return 'pink';
-    case 7: return 'green';
-    case 8: return 'lightred';
-    case 9: return 'azure';
-    default: return 'blue';
+    case 0: return '#ff8080';
+    case 1: return '#a1cbdf';
+    case 2: return '#d7fe88';
+    case 3: return '#fed684';
+    case 4: return '#a5a5e0';
+    case 5: return '#8dfd8d';
+    case 6: return '#deabce';
+    case 7: return '#e1b0b0';
+    case 8: return '#96dafc';
+    case 9: return '#92fdd9';
+    default: return '#d4e1b6';
   }
 }
-
 
 const Visualization = (props) =>{
 
@@ -33,21 +32,12 @@ const Visualization = (props) =>{
     nodes: [],
     edges: [],
 });
+
   const [selected, setSelected] = useState({});
   useEffect(() => {
     setData({
-      nodes:[
-        {
-          id: "1",
-          data : {},
-          label: "155"
-        },
-        {
-          id: "2",
-          data : {},
-          label: "122"
-        },],
-      edges:[{data:{},source:"1",target:"2",label:"123"}],
+      nodes:[],
+      edges: [],
     })
   },[]);
 
@@ -55,12 +45,12 @@ const Visualization = (props) =>{
   const onSearch = value => { 
     Fetch(`graph?search_value=${value}`,'GET')
     .then((response) => {
-      console.log(response);
+      console.log(response)
       let nodes = response.data.nodes.map(node=>{
         return {
           ...node,
           style: {
-            dark: switch_color(node.color),
+            fill: switch_color(node.color),
             nodeSize: node.size,
           }
         };
@@ -88,7 +78,7 @@ const Visualization = (props) =>{
     };
   },[graphRef])
   
-
+console.log(selected)
 
   return(
     <div className="body">
@@ -110,7 +100,11 @@ const Visualization = (props) =>{
           </div>
         </div>
         <div className="kno-map-graphin">
-          <Graphin data={data} ref={graphRef}>
+          <Graphin data={data} 
+          ref={graphRef} 
+          options={{
+              autoPolyEdge: true,
+            }}>
             <Toolbar></Toolbar>
           </Graphin>
         </div>
