@@ -209,6 +209,7 @@ body {
   .bottom{
     flex: 5;
     display: flex;
+    background-color: rgb(239,239,239);
   }
   .lift{
     flex: 1;

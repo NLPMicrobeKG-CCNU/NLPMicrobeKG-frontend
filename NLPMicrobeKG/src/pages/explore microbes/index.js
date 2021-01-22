@@ -16,7 +16,7 @@ const Explore =()=>{
         Fetch(`search?search_type=${type}&query=${value}&limit=${1000}&page=${0}`)
             .then((response) => {
                 setRes(1)
-                if(type == 'data')
+                if(type === 'data')
                 setData(response.data?.map((item,index) =>(
                     {
                         key:index,
@@ -25,14 +25,15 @@ const Explore =()=>{
                         CompoundName: item.compoundname,
                         Mount: item.mount,
                         Unit: item.unit,
-                        FoodName: item.foodname
+                        FoodName: item.foodname,
+                        FoodId: item.foodid
                     }
                 )))
                 else
                     setData(response.data?.map((item, index) => (
                         {
                             key: index,
-                            BacName: item.bacname,
+                            BacName:  item.bacname,
                             Bac2Name: item.bac2name,
                             Bac3Name: item.bac3name,
                             Bac4Name: item.bac4name,
@@ -50,7 +51,7 @@ const Explore =()=>{
     } 
 
     useEffect(() =>{
-        if(type=='data'){
+        if(type === 'data'){
             setColumns(
                 [
                     {
@@ -89,6 +90,14 @@ const Explore =()=>{
                             multiple: 1,
                         },
                     },
+                    {
+                        title: 'FoodId',
+                        dataIndex: 'FoodId',
+                        sorter: {
+                            compare: (a, b) => a.FoodId - b.FoodId,
+                            multiple: 1,
+                        },
+                    }, 
                     {
                         title: 'FoodName',
                         dataIndex: 'FoodName',
@@ -146,6 +155,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Reference - b.Reference,
                             multiple: 1,
                         },
+                        render: (text) => <a href={text}>{text}</a>,
                     },
                     {
                         title: 'Ref2',
@@ -154,6 +164,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Ref2 - b.Ref2,
                             multiple: 1,
                         },
+                        render: (text) => <a href={text}>{text}</a>,
                     },
                     {
                         title: 'Ref3',
@@ -162,6 +173,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Ref3 - b.Ref3,
                             multiple: 1,
                         },
+                        render: (text) => <a href={text}>{text}</a>,
                     },
                     {
                         title: 'Ref4',
@@ -170,6 +182,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Ref4 - b.Ref4,
                             multiple: 1,
                         },
+                        render: (text) => <a href={text}>{text}</a>,
                     },
                 ]
             )
@@ -188,7 +201,9 @@ const Explore =()=>{
             <main>
                 <div className="container">
                     <div className="title">EXPLORE PETIDES</div>
-                    <div className="context">balabala</div>
+                    <div className="context">The following two parts of the data query are text mining and data fusion.
+                    Give a bacteria name to get the results.
+                    </div>
                     <Select defaultValue="text" className="select" onChange={handleChange}>
                         <Option value="text">Text Mining</Option>
                         <Option value="data">Data fusion</Option>

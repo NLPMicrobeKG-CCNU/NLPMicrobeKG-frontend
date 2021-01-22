@@ -95,7 +95,7 @@ console.log(selected)
             onSearch={onSearch}
             ></Search>
             <div className="kno-map-recommend">
-              推荐：123 234 234
+              推荐：Porphyromonas cangingivalis, Prevotella intermedia, Bergeyella cardium
             </div>
           </div>
         </div>
@@ -115,11 +115,8 @@ console.log(selected)
           <div className="kno-map-text-type">
             Types:<br/>
             {selected.type?selected.type[0]:null}<br/>
-            RDF rank:<br/>
-            {selected?selected?.rank:null}<br/>
+            URI:<br/>
             {selected.id?selected?.id:null}<br/>
-            {selected.node_properties?selected?.node_properties[0].title:null}<br/>
-            {selected.label?selected?.label:null}
             </div>
         </div>
       </main>
