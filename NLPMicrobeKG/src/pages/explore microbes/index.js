@@ -34,10 +34,22 @@ const Explore =()=>{
                         {
                             key: index,
                             BacName:  item.bacname,
-                            Bac2Name: item.bac2name,
-                            Bac3Name: item.bac3name,
-                            Bac4Name: item.bac4name,
-                            Disname: item.disname,
+                            Bac2Name: {
+                                name: item.bac2name,
+                                ref: item.ref2
+                            },
+                            Bac3Name: {
+                                name: item.bac3name,
+                                ref: item.ref3
+                            },
+                            Bac4Name: {
+                                name: item.bac4name,
+                                ref: item.ref4
+                            },
+                            Disname: {
+                                name: item.disname,
+                                ref: item.reference
+                            },
                             Reference: item.reference,
                             Ref2: item.ref2,
                             Ref3: item.ref3,
@@ -123,6 +135,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Bac2Name - b.Bac2Name,
                             multiple: 3,
                         },
+                        render: (obj) => <a href={obj.ref}>{obj.name}</a>,
                     },
                     {
                         title: 'Bac3Name',
@@ -131,6 +144,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Bac3Name - b.Bac3Name,
                             multiple: 2,
                         },
+                        render: (obj) => <a href={obj.ref}>{obj.name}</a>,
                     },
                     {
                         title: 'Bac4Name',
@@ -139,6 +153,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Bac4Name - b.Bac4Name,
                             multiple: 1,
                         },
+                        render: (obj) => <a href={obj.ref}>{obj.name}</a>,
                     },
                     {
                         title: 'Disname',
@@ -147,42 +162,7 @@ const Explore =()=>{
                             compare: (a, b) => a.Disname - b.Disname,
                             multiple: 1,
                         },
-                    },
-                    {
-                        title: 'Reference',
-                        dataIndex: 'Reference',
-                        sorter: {
-                            compare: (a, b) => a.Reference - b.Reference,
-                            multiple: 1,
-                        },
-                        render: (text) => <a href={text}>{text}</a>,
-                    },
-                    {
-                        title: 'Ref2',
-                        dataIndex: 'Ref2',
-                        sorter: {
-                            compare: (a, b) => a.Ref2 - b.Ref2,
-                            multiple: 1,
-                        },
-                        render: (text) => <a href={text}>{text}</a>,
-                    },
-                    {
-                        title: 'Ref3',
-                        dataIndex: 'Ref3',
-                        sorter: {
-                            compare: (a, b) => a.Ref3 - b.Ref3,
-                            multiple: 1,
-                        },
-                        render: (text) => <a href={text}>{text}</a>,
-                    },
-                    {
-                        title: 'Ref4',
-                        dataIndex: 'Ref4',
-                        sorter: {
-                            compare: (a, b) => a.Ref4 - b.Ref4,
-                            multiple: 1,
-                        },
-                        render: (text) => <a href={text}>{text}</a>,
+                        render: (obj) => <a href={obj.ref}>{obj.name}</a>,
                     },
                 ]
             )
