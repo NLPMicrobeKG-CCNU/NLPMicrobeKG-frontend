@@ -49,7 +49,7 @@ const Contact = ()=>{
                 <div className="top">Team</div>
                 <div className="bottom">
                 <div className="second"><span className="big">Project leader：</span> Chengcheng Fu</div>
-                <div className="second"><span className="big">Members：</span>Xiaobin Jiang</div>
+                <div className="second"><span className="big">Members：</span><br />Xiaobin Jiang<br /> Chenlong Han<br />Hongxu Zhang <br />Junjie Zhang<br /> Wenjian Wang</div>
                 <div className="second"><span className="big">email：</span>ccfu@mails.ccnu.edu.cn</div>
                 </div> 
             </div>

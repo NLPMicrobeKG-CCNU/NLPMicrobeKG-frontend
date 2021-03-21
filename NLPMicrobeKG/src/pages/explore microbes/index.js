@@ -15,7 +15,7 @@ const Explore =()=>{
     const onSearch = (value) => {
         Fetch(`search?search_type=${type}&query=${value}&limit=${1000}&page=${0}`)
             .then((response) => {
-                setRes(1)
+                setRes(1);
                 if(type === 'data')
                 setData(response.data?.map((item,index) =>(
                     {
@@ -167,6 +167,7 @@ const Explore =()=>{
                 ]
             )
         }
+        setData([])
     },[type])
 
 
@@ -180,7 +181,7 @@ const Explore =()=>{
             <Header></Header>
             <main>
                 <div className="container">
-                    <div className="title">EXPLORE PETIDES</div>
+                    <div className="title">EXPLORE MICROBES</div>
                     <div className="context">The following two parts of the data query are text mining and data fusion.
                     Give a bacteria name to get the results.
                     </div>

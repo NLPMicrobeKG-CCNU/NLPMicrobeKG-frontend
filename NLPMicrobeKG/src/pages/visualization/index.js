@@ -45,8 +45,10 @@ const Visualization = (props) =>{
   const onSearch = value => { 
     Fetch(`graph?search_value=${value}`,'GET')
     .then((response) => {
-      console.log(response)
-      let nodes = response.data.nodes.map(node=>{
+      if (!response.data.nodes && !response.data.edges) {
+        alert("没有找到想要的数据!");
+      }
+      let nodes = !response.data.nodes ? [] : response.data.nodes.map(node=>{
         return {
           ...node,
           style: {
@@ -55,7 +57,7 @@ const Visualization = (props) =>{
           }
         };
       });
-      let edges = response.data.edges;
+      let edges = response.data.edges ? response.data.edges : [];
       setData({
         nodes:nodes,
         edges:edges,
@@ -66,7 +68,6 @@ const Visualization = (props) =>{
   useEffect(()=>{
     const { graph } = graphRef.current;
     const handleNodeClick = e => {
-      console.log('node:click', e);
       setSelected(
         e.item.get('model')
         );
@@ -78,7 +79,6 @@ const Visualization = (props) =>{
     };
   },[graphRef])
   
-console.log(selected)
 
   return(
     <div className="body">
@@ -95,7 +95,7 @@ console.log(selected)
             onSearch={onSearch}
             ></Search>
             <div className="kno-map-recommend">
-              推荐：Porphyromonas cangingivalis, Prevotella intermedia, Bergeyella cardium
+              Example：Porphyromonas cangingivalis, Prevotella intermedia, Bergeyella cardium
             </div>
           </div>
         </div>
@@ -110,7 +110,6 @@ console.log(selected)
         </div>
         <div className="kno-map-text">
           <div className="kno-map-text-title">{selected?.label}
-          <div className="kno-map-text-description">{selected?.label}</div>
           </div>
           <div className="kno-map-text-type">
             Types:<br/>
