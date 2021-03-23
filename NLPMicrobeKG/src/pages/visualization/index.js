@@ -26,13 +26,12 @@ const switch_color = (number) => {
   }
 }
 
-const Visualization = (props) =>{
+const Visualization = ({match}) =>{
 
   const [data, setData] = useState({
     nodes: [],
     edges: [],
 });
-
   const [selected, setSelected] = useState({});
   useEffect(() => {
     setData({
@@ -40,28 +39,27 @@ const Visualization = (props) =>{
       edges: [],
     })
   },[]);
-
   const {Search} = Input
-  const onSearch = value => { 
+  const onSearch = (value) => { 
     Fetch(`graph?search_value=${value}`,'GET')
     .then((response) => {
-      if (!response.data.nodes && !response.data.edges) {
-        alert("没有找到想要的数据!");
-      }
-      let nodes = !response.data.nodes ? [] : response.data.nodes.map(node=>{
-        return {
-          ...node,
-          style: {
-            fill: switch_color(node.color),
-            nodeSize: node.size,
-          }
-        };
-      });
-      let edges = response.data.edges ? response.data.edges : [];
-      setData({
-        nodes:nodes,
-        edges:edges,
-      })
+        if (!response.data.nodes && !response.data.edges) {
+          alert("没有找到想要的数据!");
+        }
+        let nodes = !response.data.nodes ? [] : response.data.nodes.map(node=>{
+          return {
+            ...node,
+            style: {
+              fill: switch_color(node.color),
+              nodeSize: node.size,
+            }
+          };
+        });
+        let edges = response.data.edges ? response.data.edges : [];
+        setData({
+          nodes: [...data.nodes,...nodes],
+          edges: [...data.edges,...edges],
+        });
     });
   }
   const graphRef = React.createRef(null);
@@ -71,18 +69,19 @@ const Visualization = (props) =>{
       setSelected(
         e.item.get('model')
         );
+      onSearch(e.item.get('model').label);
   };
   graph.on('node:click', handleNodeClick);
   return () => {
       // 如果是每次渲染，那就需要解绑事件
       graph.off('node:click', handleNodeClick);
     };
-  },[graphRef])
+  },[graphRef]);
   
 
   return(
     <div className="body">
-      <Header></Header>
+      <Header title={match.params.name}></Header>
       <main>
         <div className="kno-map-main">
           <div className="kno-map-title">

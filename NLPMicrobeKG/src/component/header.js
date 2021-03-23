@@ -2,18 +2,17 @@
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-import logo from '../assets/schoolLogo.png';
 import "./header.css"
 
 const menu = (mode) => (
   <Menu>
     <Menu.Item>
-      <Link to={`/${mode}`} className="link">
+      <Link to={`/${mode}/MicrobeKG`} className="link">
         MicrobeKG
       </Link>
     </Menu.Item>
     <Menu.Item>
-      <Link to={`/${mode}`} className="link">
+      <Link to={`/${mode}/MDepressionKG`} className="link">
         MDepressionKG
       </Link>
     </Menu.Item>
@@ -22,12 +21,13 @@ const menu = (mode) => (
 
 
 
-const Header = () =>{
+const Header = (props) =>{
+  const {title} =props
     return (
         <header>
         <div className="header-container">
           <img src="https://www.ccnu.edu.cn/images/footer_logo.png" alt="" className="logo" />
-          <div className="header-title">MicrobeKG</div>
+          <div className="header-title">{title || "MicrobeKG"}</div>
           <div className="header-content">
             <Link to ="/home" className="link"><div className="Home margin">Home </div></Link>
             <Dropdown overlay={menu('explore')}>
