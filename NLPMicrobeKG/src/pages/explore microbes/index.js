@@ -7,58 +7,59 @@ import Fetch from '../../fecth.js';
 import { Table } from 'antd';
 import { Link } from "react-router-dom";
 
-
 const Explore =(props)=>{
-    const { name , column ,init} = props
+    const { name , column ,init , text} = props
     const [res, setRes] = useState(0);
     const [data, setData] = useState([]);
     const [type, setType] = useState(init);
     const [columns, setColumns] = useState([]);
     const onSearch = (value) => {
-        Fetch(`search?search_type=${type}&query=${value}&limit=${1000}&page=${0}`)
-            .then((response) => {
-                setRes(1);
-                if(type === 'data'){
-                setData(response?.data?.map((item,index) =>(
-                    {
-                        key:index,
-                        BacName: item.bacname,
-                        ModuleName: item.modulename,
-                        CompoundName: item.compoundname,
-                        Mount: item.mount,
-                        Unit: item.unit,
-                        FoodName: item.foodname,
-                        FoodId: item.foodid
-                    }
-                )))}
-                else if(type === 'text')
-                    setData(response?.data?.map((item, index) => (
+        if(name === "MicrobeKG"){
+            Fetch(`search?search_type=${type}&query=${value}&limit=${1000}&page=${0}`)
+                .then((response) => {
+                    setRes(1);
+                    if(type === 'data'){
+                    setData(response?.data?.map((item,index) =>(
                         {
-                            key: index,
-                            BacName:  item.bacname,
-                            Bac2Name: {
-                                name: item.bac2name,
-                                ref: item.ref2
-                            },
-                            Bac3Name: {
-                                name: item.bac3name,
-                                ref: item.ref3
-                            },
-                            Bac4Name: {
-                                name: item.bac4name,
-                                ref: item.ref4
-                            },
-                            Disname: {
-                                name: item.disname,
-                                ref: item.reference
-                            },
-                            Reference: item.reference,
-                            Ref2: item.ref2,
-                            Ref3: item.ref3,
-                            Ref4: item.ref4
+                            key:index,
+                            BacName: item.bacname,
+                            ModuleName: item.modulename,
+                            CompoundName: item.compoundname,
+                            Mount: item.mount,
+                            Unit: item.unit,
+                            FoodName: item.foodname,
+                            FoodId: item.foodid
                         }
-                    ))) 
-            })
+                    )))}
+                    else if(type === 'text')
+                        setData(response?.data?.map((item, index) => (
+                            {
+                                key: index,
+                                BacName:  item.bacname,
+                                Bac2Name: {
+                                    name: item.bac2name,
+                                    ref: item.ref2
+                                },
+                                Bac3Name: {
+                                    name: item.bac3name,
+                                    ref: item.ref3
+                                },
+                                Bac4Name: {
+                                    name: item.bac4name,
+                                    ref: item.ref4
+                                },
+                                Disname: {
+                                    name: item.disname,
+                                    ref: item.reference
+                                },
+                                Reference: item.reference,
+                                Ref2: item.ref2,
+                                Ref3: item.ref3,
+                                Ref4: item.ref4
+                            }
+                        ))) 
+                })
+        }
     }
     const handleChange = (value) => {
        setType(value) 
@@ -74,7 +75,6 @@ const Explore =(props)=>{
         setData([])
     },[type])
 
-
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
@@ -85,11 +85,10 @@ const Explore =(props)=>{
             <Header title={name}></Header>
             <main>
                 <div className="container">
-                    <div className="title">EXPLORE MICROBES</div>
-                    <div className="context">The following two parts of the data query are text mining and data fusion.
-                    Give a bacteria name to get the results.
+                    <div className="title">EXPLORE {name === "MicrobeKG" ?"MICROBES":"DEPRESSION"}</div>
+                    <div className="context">{text}
                     </div>
-                    {init === 'text' ?<Select defaultValue="text" className="select" onChange={handleChange}>
+                    {name === "MicrobeKG" ? <Select defaultValue="text" className="select" onChange={handleChange}>
                         <Option value="text">Text Mining</Option>
                         <Option value="data">Data fusion</Option>
                     </Select>:
@@ -118,7 +117,7 @@ const Index = ({ match }) => {
     const columnMicrobe = [[{
         title: 'BacName',
         dataIndex: 'BacName',
-        render: (names) => <Link to={`/visualization/${name}/${names}`}>{names}</Link>
+        render: (names) => <Link to={{pathname: `/visualization/${name}`,state:{nodeName : names}}} >{names}</Link>
     },
         {
             title: 'ModuleName',
@@ -127,6 +126,7 @@ const Index = ({ match }) => {
                 compare: (a, b) => a.ModuleName - b.ModuleName,
                 multiple: 3,
             },
+            render: (names) => <Link to={{ pathname: `/visualization/${name}`, state: { nodeName: names } }} >{names}</Link>
         },
         {
             title: 'CompoundName',
@@ -135,6 +135,7 @@ const Index = ({ match }) => {
                 compare: (a, b) => a.CompoundName - b.CompoundName,
                 multiple: 2,
             },
+            render: (names) => <Link to={{ pathname: `/visualization/${name}`, state: { nodeName: names } }} >{names}</Link>
         },
         {
             title: 'Mount',
@@ -167,6 +168,7 @@ const Index = ({ match }) => {
                 compare: (a, b) => a.FoodName - b.FoodName,
                 multiple: 1,
             },
+            render: (names) => <Link to={{ pathname: `/visualization/${name}`, state: { nodeName: names } }} >{names}</Link>
         },], [{
             title: 'BacName',
             dataIndex: 'BacName',
@@ -207,45 +209,47 @@ const Index = ({ match }) => {
                 },
                 render: (obj) => <a href={obj.ref}>{obj.name}</a>,
             },]];
+    const textMicrobe = "The following two parts of the data query are text mining and data fusion.Give a bacteria name to get the results."
+    const textDepression ="The following two parts of the data query are concurrent diseases and nutrition food. Giving a standard term can get the results."
     const columnDepression = [
         [{
-        title: 'depression',
+        title: 'Depression',
         dataIndex: 'Depression',
     },{
-        title: 'bac',
+        title: 'Bac',
         dataIndex: 'Bac'
     },{
-        title: 'bacname',
+        title: 'Bacname',
         dataIndex: 'BacName'
     },{
-        title: 'syndrome',
+        title: 'Syndrome',
         dataIndex: 'Syndrome'
     }],
     [{
-        title: 'depression',
+        title: 'Depression',
         dataIndex: 'Depression',
     },{
-        title: 'bac',
+        title: 'Bac',
         dataIndex: 'Bac'
     },{
-        title: 'bacname',
+        title: 'Bacname',
         dataIndex: 'BacName'
     },{
-        title: 'compound',
+        title: 'Compound',
         dataIndex: 'Compound',
     },{
-        title: 'compoundName',
+        title: 'CompoundName',
         dataIndex: 'CompoundName',
     },{
-        title: 'food',
+        title: 'Food',
         dataIndex: 'Food'
     }]];
     return(
         <>
      {"MicrobeKG" === name ? 
-        <Explore name={name} column={columnMicrobe} init = "text" /> 
+        <Explore name={name} column={columnMicrobe} init = "text" text = {textMicrobe} /> 
      : 
-     <Explore name={name} column ={columnDepression} init = "disease" />
+     <Explore name={name} column ={columnDepression} init = "disease" text = {textDepression}/>
     }</>
     )
 }

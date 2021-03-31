@@ -3,7 +3,7 @@ import './index.css';
 import Header from'../../component/header';
 import Footer from '../../component/footer'
 import Graphin, { Utils } from '@antv/graphin';
-import { Toolbar } from '@antv/graphin-components';
+import { Toolbar} from '@antv/graphin-components';
 import { Input } from 'antd';
 import Fetch from '../../fecth.js';
 import '@antv/graphin/dist/index.css'; // Graphin CSS
@@ -27,8 +27,7 @@ const switch_color = (number) => {
 }
 
 
-const Visualization = ({match}) =>{
-
+const Visualization = ({match, location}) =>{
   const [data, setData] = useState({
     nodes: [],
     edges: [],
@@ -46,6 +45,10 @@ const Visualization = ({match}) =>{
       edges: [],
     })
   }
+  useEffect(() => {
+    if(location.state?.nodeName)
+    onSearch(location.state?.nodeName)
+  },[location.state?.nodeName])
   const {Search} = Input
   const onSearch = (value) => { 
     Fetch(`graph?search_value=${value}`,'GET')
@@ -63,9 +66,19 @@ const Visualization = ({match}) =>{
           };
         });
         let edges = response.data.edges ? response.data.edges : [];
+        let edge = Utils.processEdges([...data.edges, ...edges]).map(e => ({
+          source: e.source, 
+          target: e.target,
+          style: {
+            label:{
+              value: e.label,
+            }
+          },
+          data: e.data
+        }));
         setData({
           nodes: [...data.nodes,...nodes],
-          edges: [...data.edges,...edges],
+          edges: edge,
         });
     });
   }
@@ -76,7 +89,7 @@ const Visualization = ({match}) =>{
       setSelected(
         e.item.get('model')
         );
-      /* onSearch(e.item.get('model').label); */
+      onSearch(e.item.get('model').label);
   };
   graph.on('node:click', handleNodeClick);
   return () => {
@@ -113,7 +126,13 @@ const Visualization = ({match}) =>{
             options={{
               autoPolyEdge: true,
             }}
-            layout={{ type: 'concentric' }}>
+            layout={{
+              type: 'graphin-force',
+              preset: {
+                type: 'concentric',
+              },
+              animation: true,
+            }}>
             <Toolbar></Toolbar>
           </Graphin>
         </div>
