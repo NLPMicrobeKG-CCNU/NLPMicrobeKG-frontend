@@ -26,6 +26,7 @@ const switch_color = (number) => {
   }
 }
 
+
 const Visualization = ({match}) =>{
 
   const [data, setData] = useState({
@@ -39,14 +40,20 @@ const Visualization = ({match}) =>{
       edges: [],
     })
   },[]);
+  const clear = () => {
+    setData({
+      nodes: [],
+      edges: [],
+    })
+  }
   const {Search} = Input
   const onSearch = (value) => { 
     Fetch(`graph?search_value=${value}`,'GET')
     .then((response) => {
-        if (!response.data.nodes && !response.data.edges) {
+        if (!response?.data.nodes && !response?.data.edges) {
           alert("没有找到想要的数据!");
         }
-        let nodes = !response.data.nodes ? [] : response.data.nodes.map(node=>{
+        let nodes = !response?.data.nodes ? [] : response.data.nodes.map(node=>{
           return {
             ...node,
             style: {
@@ -69,7 +76,7 @@ const Visualization = ({match}) =>{
       setSelected(
         e.item.get('model')
         );
-      onSearch(e.item.get('model').label);
+      /* onSearch(e.item.get('model').label); */
   };
   graph.on('node:click', handleNodeClick);
   return () => {
@@ -92,6 +99,7 @@ const Visualization = ({match}) =>{
             <Search className="kno-map-search-input" 
             placeholder="" allowClear
             onSearch={onSearch}
+            onClick={clear}
             ></Search>
             <div className="kno-map-recommend">
               Example：Porphyromonas cangingivalis, Prevotella intermedia, Bergeyella cardium
@@ -99,11 +107,13 @@ const Visualization = ({match}) =>{
           </div>
         </div>
         <div className="kno-map-graphin">
-          <Graphin data={data} 
-          ref={graphRef} 
-          options={{
+          <Graphin 
+            data={data} 
+            ref={graphRef} 
+            options={{
               autoPolyEdge: true,
-            }}>
+            }}
+            layout={{ type: 'concentric' }}>
             <Toolbar></Toolbar>
           </Graphin>
         </div>

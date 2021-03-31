@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Visualization from './pages/visualization/index';
-import Explore from './pages/explore microbes/index';
+import Index from './pages/explore microbes/index';
 import Home from './pages/home/index';
 import Contact from './pages/contact us/index';
 import { BrowserRouter , Route} from "react-router-dom";
@@ -12,7 +12,7 @@ ReactDOM.render(
     <React.StrictMode>
       <Route path="/home" component={Home} />
       <Route path="/visualization/:name" component={Visualization} />
-      <Route path ="/explore/:name" component={Explore} />
+      <Route path ="/explore/:name" component={Index} />
       <Route path ="/contact" component={Contact} />
     </React.StrictMode>
   </BrowserRouter>,
