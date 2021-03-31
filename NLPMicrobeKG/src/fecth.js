@@ -1,5 +1,5 @@
 const Fetch = (url, method) => {
-    const preHttp = "http://10.102.64.53:1203/api/v1/";
+  const preHttp = "http://115.29.195.229:1203/api/v1/";
     return fetch(
       preHttp + url,
       {

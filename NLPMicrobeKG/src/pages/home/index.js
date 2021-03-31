@@ -11,7 +11,7 @@ const Home = () => {
     <div className="up">
         <div className="high">
             <div className="high-1">
-                NLPMicrobeKG
+                MicrobeKG
             </div>
             <div className="high-2">
                 Last update：18/12/2020
@@ -46,12 +46,12 @@ const Home = () => {
             </div>
             <div className="mid-right">
                 <div className="mid-right-1">
-                    <div className="mid-right-1-top">What is NLPMicrobeKG</div>
+                    <div className="mid-right-1-top">What is MicrobeKG</div>
                     <div className="mid-right-1-main">
-                        <li className="mid-right-1-main-li">NLPMicrobeKG is a domain graph based on text mining technology, which aims to provide an open resource for gut microbes in the fields of human metabolism, nutrition and disease intervention.</li>
+                        <li className="mid-right-1-main-li">MicrobeKG is a domain graph based on text mining technology, which aims to provide an open resource for gut microbes in the fields of human metabolism, nutrition and disease intervention.</li>
                         <li className="mid-right-1-main-li">The microbe-gut-brain axis plays a key role in human metabolism. Intestinal microbes influence human health or disease states through metabolism. Food nutrition can also regulate metabolic reactions to provide a mild disease treatment plan. The knowledge graph technology is used to construct a complex associated semantic network, providing semantic retrieval, knowledge reasoning, and future application services such as association prediction.</li>
                         <li className="mid-right-1-main-li">We designed the ontology association of microbe-metabolism-nutrition-disease based on the domain structured knowledge, and used text mining methods to extract the associated triples from the biomedical text automatically.</li>
-                        <li className="mid-right-1-main-li">NLPMicrobeKG contains a total of <span className="tt">5,490,576</span> triples, of which <span className="tt">3,627,417</span> triple associations are obtained through automatic inference.</li>
+                        <li className="mid-right-1-main-li">MicrobeKG contains a total of <span className="tt">5,490,576</span> triples, of which <span className="tt">3,627,417</span> triple associations are obtained through automatic inference.</li>
                     </div>
                 </div>
                 <div className="mid-right-2"></div>

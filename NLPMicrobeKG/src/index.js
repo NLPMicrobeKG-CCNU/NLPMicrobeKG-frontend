@@ -9,12 +9,12 @@ import { BrowserRouter , Route} from "react-router-dom";
 
 ReactDOM.render(
   <BrowserRouter>
-  <React.StrictMode>
-    <Route path="/home" component={Home} />
-    <Route path ="/visualization" component={Visualization} />
-    <Route path ="/explore" component={Explore} />
-    <Route path ="/contact" component={Contact} />
-  </React.StrictMode>
+    <React.StrictMode>
+      <Route path="/home" component={Home} />
+      <Route path="/visualization/:name" component={Visualization} />
+      <Route path ="/explore/:name" component={Explore} />
+      <Route path ="/contact" component={Contact} />
+    </React.StrictMode>
   </BrowserRouter>,
   document.getElementById('root')
 );

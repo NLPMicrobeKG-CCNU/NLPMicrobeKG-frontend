@@ -5,9 +5,10 @@ import Header from '../../component/header'
 import Footer from '../../component/footer'
 import Fetch from '../../fecth.js';
 import { Table } from 'antd';
+import { Link } from "react-router-dom";
 
 
-const Explore =()=>{
+const Explore =({match})=>{
     const [res, setRes] = useState(0);
     const [data, setData] = useState([]);
     const [type, setType] = useState('text');
@@ -15,7 +16,7 @@ const Explore =()=>{
     const onSearch = (value) => {
         Fetch(`search?search_type=${type}&query=${value}&limit=${1000}&page=${0}`)
             .then((response) => {
-                setRes(1)
+                setRes(1);
                 if(type === 'data')
                 setData(response.data?.map((item,index) =>(
                     {
@@ -61,7 +62,7 @@ const Explore =()=>{
     const handleChange = (value) => {
        setType(value) 
     } 
-
+ 
     useEffect(() =>{
         if(type === 'data'){
             setColumns(
@@ -69,6 +70,7 @@ const Explore =()=>{
                     {
                         title: 'BacName',
                         dataIndex: 'BacName',
+                        render: (name) => <Link to={`/visualization/${match.params.name}/${name}`}>{name}</Link>
                     },
                     {
                         title: 'ModuleName',
@@ -167,6 +169,7 @@ const Explore =()=>{
                 ]
             )
         }
+        setData([])
     },[type])
 
 
@@ -177,10 +180,10 @@ const Explore =()=>{
     const {Option} = Select
     return (
         <div className="body">
-            <Header></Header>
+            <Header title={match.params.name}></Header>
             <main>
                 <div className="container">
-                    <div className="title">EXPLORE PETIDES</div>
+                    <div className="title">EXPLORE MICROBES</div>
                     <div className="context">The following two parts of the data query are text mining and data fusion.
                     Give a bacteria name to get the results.
                     </div>
