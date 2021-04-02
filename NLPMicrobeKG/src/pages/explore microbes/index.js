@@ -15,7 +15,7 @@ const Explore =(props)=>{
     const [columns, setColumns] = useState([]);
     const onSearch = (value) => {
         if(name === "MicrobeKG"){
-            Fetch(`search?search_type=${type}&query=${value}&limit=${1000}&page=${0}`)
+            Fetch(`search/microbe?search_type=${type}&query=${value}&limit=${1000}&page=${0}`,`GET`)
                 .then((response) => {
                     setRes(1);
                     if(type === 'data'){
@@ -59,6 +59,32 @@ const Explore =(props)=>{
                             }
                         ))) 
                 })
+        }else{
+            Fetch(`search/mdepression?search_type=${type}&query=${window.btoa(value)}&limit=${1000}&page=${0}`,`GET`)
+            .then((response) =>{
+                setRes(1);
+                if(type === 'diseases'){
+                    setData(response?.data?.map((item, index) => ({
+                        key: index,
+                        MDD: 'Major depressive disorder',
+                        Bacteria: item.bacname,
+                        Relevant_Disease: {
+                            name:item.relevant_disease,
+                            ref: item.syndrome
+                        },
+                        Type: item.type
+                    })))
+                }else{
+                    setData(response?.data?.map((item, index) => ({
+                        key: index,
+                        MDD: 'Major depressive disorder',
+                        Bacteria: item.bacname||'NULL',
+                        Compound: item.compoundname,
+                        Food: item.food,
+                        Type: item.type
+                    })))
+                }
+            })
         }
     }
     const handleChange = (value) => {
@@ -66,7 +92,7 @@ const Explore =(props)=>{
     } 
  
     useEffect(() =>{
-        if(type === 'data' || type === 'disease'){
+        if(type === 'data' || type === 'diseases'){
             setColumns(column[0])
         }
         else{
@@ -92,8 +118,8 @@ const Explore =(props)=>{
                         <Option value="text">Text Mining</Option>
                         <Option value="data">Data fusion</Option>
                     </Select>:
-                        <Select defaultValue="disease" className="select" onChange={handleChange}>
-                            <Option value="disease">Disease</Option>
+                        <Select defaultValue="diseases" className="select" onChange={handleChange}>
+                            <Option value="diseases">Diseases</Option>
                             <Option value="food">Food</Option>
                         </Select>
                     }
@@ -213,43 +239,45 @@ const Index = ({ match }) => {
     const textDepression ="The following two parts of the data query are concurrent diseases and nutrition food. Giving a standard term can get the results."
     const columnDepression = [
         [{
-        title: 'Depression',
-        dataIndex: 'Depression',
+        title: 'MDD',
+        dataIndex: 'MDD',
     },{
-        title: 'Bac',
-        dataIndex: 'Bac'
+        title: 'Bacteria',
+        dataIndex: 'Bacteria',
+        render: (names) => <Link to={{ pathname: `/visualization/${name}`, state: { nodeName: names } }} >{names}</Link>
+
     },{
-        title: 'Bacname',
-        dataIndex: 'BacName'
+        title: 'Relevant Disease',
+        dataIndex: 'Relevant_Disease',
+            render: (obj) => <a href={obj.ref} target="_blank" rel="noopener norefer noreferrer">{obj.name}</a>,
     },{
-        title: 'Syndrome',
-        dataIndex: 'Syndrome'
+        title: 'Type',
+        dataIndex: 'Type',
     }],
     [{
-        title: 'Depression',
-        dataIndex: 'Depression',
+        title: 'MDD',
+        dataIndex: 'MDD',
     },{
-        title: 'Bac',
-        dataIndex: 'Bac'
-    },{
-        title: 'Bacname',
-        dataIndex: 'BacName'
+        title: 'Bacteria',
+        dataIndex: 'Bacteria',
+        render: (names) => (names ==="NULL"? "NULL" :<Link to={{ pathname: `/visualization/${name}`, state: { nodeName: names } }} >{names}</Link>)
     },{
         title: 'Compound',
         dataIndex: 'Compound',
-    },{
-        title: 'CompoundName',
-        dataIndex: 'CompoundName',
+        render: (names) => <Link to={{ pathname: `/visualization/${name}`, state: { nodeName: names } }} >{names}</Link>
     },{
         title: 'Food',
         dataIndex: 'Food'
+    }, {
+        title: 'Type',
+        dataIndex: 'Type',
     }]];
     return(
         <>
      {"MicrobeKG" === name ? 
         <Explore name={name} column={columnMicrobe} init = "text" text = {textMicrobe} /> 
      : 
-     <Explore name={name} column ={columnDepression} init = "disease" text = {textDepression}/>
+     <Explore name={name} column ={columnDepression} init = "diseases" text = {textDepression}/>
     }</>
     )
 }

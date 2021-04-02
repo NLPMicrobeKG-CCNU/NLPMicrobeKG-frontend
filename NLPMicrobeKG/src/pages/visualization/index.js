@@ -84,7 +84,7 @@ const Visualization = ({match, location}) =>{
           if (!response?.data.nodes && !response?.data.edges) {
             alert("没有找到想要的数据!");
           }
-          let nodes = !response?.data.nodes ? [] : response.data.nodes.map(node=>{
+          let nodes = !response?.data.nodes ? [] : response?.data.nodes.map(node=>{
             return {
               ...node,
               style: {
@@ -93,8 +93,8 @@ const Visualization = ({match, location}) =>{
               }
             };
           });
-          let edges = response.data.edges ? response.data.edges : [];
-          let edge = Utils.processEdges([...data.edges, ...edges]).map(e => ({
+          let edges = response?.data.edges ? response?.data.edges : [];
+          let edge = Utils.processEdges(edges).map(e => ({
             source: e.source, 
             target: e.target,
             style: {
@@ -106,7 +106,7 @@ const Visualization = ({match, location}) =>{
           }));
           setData({
             nodes: [...data.nodes,...nodes],
-            edges: edge,
+            edges: [...data.edges,...edge],
           });
       });
       setSearched([...searched, value]);
