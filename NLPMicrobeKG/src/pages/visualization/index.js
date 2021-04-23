@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React ,{useState,useEffect}from 'react';
 import './index.css';
 import Header from'../../component/header';
@@ -8,7 +9,35 @@ import { Input } from 'antd';
 import Fetch from '../../fecth.js';
 import '@antv/graphin/dist/index.css'; // Graphin CSS
 import '@antv/graphin-components/dist/index.css'; // Graphin 组件 CSS
+import {
+  ZoomOutOutlined,
+  ZoomInOutlined,
+} from '@ant-design/icons';
 
+const handleClick = (graphinContext, config) => {
+  const { apis } = graphinContext;
+  const { handleZoomIn, handleZoomOut } = apis;
+  if (config.key === 'zoomIn') {
+    handleZoomIn();
+  } else if (config.key === 'zoomOut') {
+    handleZoomOut();
+  }
+};
+const options = [
+  {
+    key: 'zoomOut',
+    name: (
+      <span>
+        <ZoomInOutlined />
+      </span>
+    ),
+    icon: <ZoomInOutlined />,
+  },
+  {
+    key: 'zoomIn',
+    name: <ZoomOutOutlined />,
+  },
+];
 
 const switch_color = (number) => {
   switch (number) {
@@ -32,55 +61,56 @@ const Visualization = ({match, location}) =>{
     nodes: [],
     edges: [],
 });
+  const [searched,setSearched] = useState([]) 
   const [selected, setSelected] = useState({});
   useEffect(() => {
     setData({
       nodes:[],
       edges: [],
-    })
+    });
+    setSearched([])
   },[]);
-  const clear = () => {
-    setData({
-      nodes: [],
-      edges: [],
-    })
-  }
   useEffect(() => {
-    if(location.state?.nodeName)
-    onSearch(location.state?.nodeName)
+    if(location.state?.nodeName){
+      onSearch(location.state?.nodeName)
+    }
   },[location.state?.nodeName])
   const {Search} = Input
   const onSearch = (value) => { 
-    Fetch(`graph?search_value=${value}`,'GET')
-    .then((response) => {
-        if (!response?.data.nodes && !response?.data.edges) {
-          alert("没有找到想要的数据!");
-        }
-        let nodes = !response?.data.nodes ? [] : response.data.nodes.map(node=>{
-          return {
-            ...node,
+    let index = searched.indexOf(value);
+    if(index === -1){
+      Fetch(`graph?search_value=${value}`,'GET')
+      .then((response) => {
+          if (!response?.data.nodes && !response?.data.edges) {
+            alert("没有找到想要的数据!");
+          }
+          let nodes = !response?.data.nodes ? [] : response?.data.nodes.map(node=>{
+            return {
+              ...node,
+              style: {
+                fill: switch_color(node.color),
+                nodeSize: node.size,
+              }
+            };
+          });
+          let edges = response?.data.edges ? response?.data.edges : [];
+          let edge = Utils.processEdges(edges).map(e => ({
+            source: e.source, 
+            target: e.target,
             style: {
-              fill: switch_color(node.color),
-              nodeSize: node.size,
-            }
-          };
-        });
-        let edges = response.data.edges ? response.data.edges : [];
-        let edge = Utils.processEdges([...data.edges, ...edges]).map(e => ({
-          source: e.source, 
-          target: e.target,
-          style: {
-            label:{
-              value: e.label,
-            }
-          },
-          data: e.data
-        }));
-        setData({
-          nodes: [...data.nodes,...nodes],
-          edges: edge,
-        });
-    });
+              label:{
+                value: e.label,
+              }
+            },
+            data: e.data
+          }));
+          setData({
+            nodes: [...data.nodes,...nodes],
+            edges: [...data.edges,...edge],
+          });
+      });
+      setSearched([...searched, value]);
+    }
   }
   const graphRef = React.createRef(null);
   useEffect(()=>{
@@ -112,7 +142,6 @@ const Visualization = ({match, location}) =>{
             <Search className="kno-map-search-input" 
             placeholder="" allowClear
             onSearch={onSearch}
-            onClick={clear}
             ></Search>
             <div className="kno-map-recommend">
               Example：Porphyromonas cangingivalis, Prevotella intermedia, Bergeyella cardium
@@ -133,7 +162,9 @@ const Visualization = ({match, location}) =>{
               },
               animation: true,
             }}>
-            <Toolbar></Toolbar>
+            <Toolbar 
+            options={options}
+            onChange={handleClick} />
           </Graphin>
         </div>
         <div className="kno-map-text">
