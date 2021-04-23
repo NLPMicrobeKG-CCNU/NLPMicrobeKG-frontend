@@ -1,1 +1,1 @@
-# NLPMicrobeKG-frontend
+# MicrobeKG-frontend
