@@ -9,21 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-     - name: build-assets
-       id: build-assets
-       env: 
-        PUBLIC_URL: https://qqps8xa94.hn-bkt.clouddn.com/microbe/
-       run: yarn install
-            yarn build
-     - name: upload-assets
-       id: upload-assets 
-       env: 
-            AK: ${{secrets.AK}}
-            SK: ${{secrets.SK}}
-       run: yarn global add qiniu-upload-tool --registry=https://registry.npm.taobao.org
-           qiniu-upload push -z huan -p ./build -b ccnuhcl -f microbe -r yes
-           rm -rf ./src
-           rm -rf ./node_modules
      - name: Get tag version
        id: get_version
        uses: battila7/get-version-action@v2

@@ -5,7 +5,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 
-WORKDIR /usr/src/app/sever
+WORKDIR /usr/src/app/
 
 #Build server file
 RUN yarn config set registry https://registry.npm.taobao.org/
