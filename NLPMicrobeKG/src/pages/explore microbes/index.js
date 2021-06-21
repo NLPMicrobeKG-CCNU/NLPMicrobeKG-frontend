@@ -13,26 +13,77 @@ const Explore =(props)=>{
     const [data, setData] = useState([]);
     const [type, setType] = useState(init);
     const [columns, setColumns] = useState([]);
-    const onSearch = (value) => {
+    const [initStatus, setInitStatus] = useState(false);
+
+    const mkgInitValues = ["Prevotella intermedia",
+        "Haemophilus influenzae",
+        "Staphylococcus aureus",
+        "Escherichia coli",
+        "Shigella flexneri"];
+
+    const mdInitValues = [""];
+
+    let initData = [];
+    let initDataLen = 0;
+
+    const shuffle = (arr) =>  {
+        let m = arr.length, t, i;
+        while (m) {
+            i = Math.floor(Math.random() * m--);
+            t = arr[m];
+            arr[m] = arr[i];
+            arr[i] = t;
+        }
+        return arr;
+    }
+
+    const setRespData = (respData, init) => {
+        if (init) {
+            initDataLen ++;
+            if (respData !== undefined) {
+                initData = [...initData, ...respData];
+            }
+            if (initDataLen === mkgInitValues.length) {
+                initData = shuffle(initData);
+                initData.map((value, index) => {
+                    value.key = index;
+                })
+                setData(initData);
+                setRes(1);
+            }
+        } else {
+            setData(respData);
+            setRes(1);
+        }
+    }
+
+    // init -> append
+    const fetchData = (value, init) => {
+        let limit = 1000;
+        if (init) {
+            limit = 10;
+        }
+
+        let respData;
         if(name === "MicrobeKG"){
-            Fetch(`search/microbe?search_type=${type}&query=${value}&limit=${1000}&page=${0}`,`GET`)
+            Fetch(`search/microbe?search_type=${type}&query=${value}&limit=${limit}&page=${0}`,`GET`)
                 .then((response) => {
-                    setRes(1);
+                    // setRes(1);
                     if(type === 'data'){
-                    setData(response?.data?.map((item,index) =>(
-                        {
-                            key:index,
-                            BacName: item.bacname,
-                            ModuleName: item.modulename,
-                            CompoundName: item.compoundname,
-                            Mount: item.mount,
-                            Unit: item.unit,
-                            FoodName: item.foodname,
-                            FoodId: item.foodid
-                        }
-                    )))}
-                    else if(type === 'text')
-                        setData(response?.data?.map((item, index) => (
+                        respData = response?.data?.map((item,index) =>(
+                            {
+                                key:index,
+                                BacName: item.bacname,
+                                ModuleName: item.modulename,
+                                CompoundName: item.compoundname,
+                                Mount: item.mount,
+                                Unit: item.unit,
+                                FoodName: item.foodname,
+                                FoodId: item.foodid
+                            }
+                        ))
+                    } else if(type === 'text')
+                        respData = response?.data?.map((item, index) => (
                             {
                                 key: index,
                                 BacName:  item.bacname,
@@ -57,40 +108,68 @@ const Explore =(props)=>{
                                 Ref3: item.ref3,
                                 Ref4: item.ref4
                             }
-                        ))) 
+                        ))
+                    setRespData(respData, init);
                 })
-        }else{
-            Fetch(`search/mdepression?search_type=${type}&query=${window.btoa(value)}&limit=${1000}&page=${0}`,`GET`)
-            .then((response) =>{
-                setRes(1);
-                if(type === 'diseases'){
-                    setData(response?.data?.map((item, index) => ({
-                        key: index,
-                        MDD: 'Major depressive disorder',
-                        Bacteria: item.bacname,
-                        Relevant_Disease: {
-                            name:item.relevant_disease,
-                            ref: item.syndrome
-                        },
-                        Type: item.type
-                    })))
-                }else{
-                    setData(response?.data?.map((item, index) => ({
-                        key: index,
-                        MDD: 'Major depressive disorder',
-                        Bacteria: item.bacname||'NULL',
-                        Compound: item.compoundname,
-                        Food: item.food,
-                        Type: item.type
-                    })))
-                }
-            })
+        } else {
+            Fetch(`search/mdepression?search_type=${type}&query=${window.btoa(value)}&limit=${limit}&page=${0}`,`GET`)
+                .then((response) =>{
+                    // setRes(1);
+                    if(type === 'diseases'){
+                        respData = response?.data?.map((item, index) => ({
+                            key: index,
+                            MDD: 'Major depressive disorder',
+                            Bacteria: item.bacname,
+                            Relevant_Disease: {
+                                name:item.relevant_disease,
+                                ref: item.syndrome
+                            },
+                            Type: item.type
+                        }))
+                    }else{
+                        respData = response?.data?.map((item, index) => ({
+                            key: index,
+                            MDD: 'Major depressive disorder',
+                            Bacteria: item.bacname||'NULL',
+                            Compound: item.compoundname,
+                            Food: item.food,
+                            Type: item.type
+                        }))
+                    }
+
+                    setRespData(respData, init);
+                })
         }
     }
+
+    const onSearch = (value) => {
+        fetchData(value, false);
+    }
+
     const handleChange = (value) => {
-       setType(value) 
-    } 
- 
+        initData = [];
+        initDataLen = 0;
+        setData([]);
+        setType(value);
+        setInitStatus(false);
+    }
+
+    const initPage = () => {
+        if (!initStatus) {
+            if(name === "MicrobeKG"){
+                mkgInitValues.map((value, index) => {
+                    fetchData(value, true)
+                });
+                setInitStatus(true);
+            } else {
+                mdInitValues.map((value, index) => {
+                    fetchData(value, true)
+                });
+                setInitStatus(true);
+            }
+        }
+    }
+
     useEffect(() =>{
         if(type === 'data' || type === 'diseases'){
             setColumns(column[0])
@@ -106,6 +185,8 @@ const Explore =(props)=>{
     }
     const {Search} = Input
     const {Option} = Select
+
+    initPage();
     return (
         <div className="body">
             <Header title={name}></Header>
@@ -123,7 +204,7 @@ const Explore =(props)=>{
                             <Option value="food">Food</Option>
                         </Select>
                     }
-                    <Search className="filter" 
+                    <Search className="filter"
                     placeholder="Enter a filter term"
                     onSearch={onSearch}
                     ></Search>
@@ -139,7 +220,7 @@ const Explore =(props)=>{
 }
 
 const Index = ({ match }) => {
-    const { name } = match.params
+    const { name } = match.params;
     const columnMicrobe = [[{
         title: 'BacName',
         dataIndex: 'BacName',
@@ -274,9 +355,9 @@ const Index = ({ match }) => {
     }]];
     return(
         <>
-     {"MicrobeKG" === name ? 
-        <Explore name={name} column={columnMicrobe} init = "text" text = {textMicrobe} /> 
-     : 
+     {"MicrobeKG" === name ?
+        <Explore name={name} column={columnMicrobe} init = "text" text = {textMicrobe} />
+     :
      <Explore name={name} column ={columnDepression} init = "diseases" text = {textDepression}/>
     }</>
     )

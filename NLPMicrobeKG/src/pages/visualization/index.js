@@ -61,8 +61,9 @@ const Visualization = ({match, location}) =>{
     nodes: [],
     edges: [],
 });
-  const [searched,setSearched] = useState([]) 
+  const [searched,setSearched] = useState([])
   const [selected, setSelected] = useState({});
+  const [initStatus, setInitStatus] = useState(false);
   useEffect(() => {
     setData({
       nodes:[],
@@ -75,8 +76,9 @@ const Visualization = ({match, location}) =>{
       onSearch(location.state?.nodeName)
     }
   },[location.state?.nodeName])
+
   const {Search} = Input
-  const onSearch = (value) => { 
+  const onSearch = (value) => {
     let index = searched.indexOf(value);
     if(index === -1){
       Fetch(`graph?search_value=${value}`,'GET')
@@ -95,7 +97,7 @@ const Visualization = ({match, location}) =>{
           });
           let edges = response?.data.edges ? response?.data.edges : [];
           let edge = Utils.processEdges(edges).map(e => ({
-            source: e.source, 
+            source: e.source,
             target: e.target,
             style: {
               label:{
@@ -127,8 +129,22 @@ const Visualization = ({match, location}) =>{
       graph.off('node:click', handleNodeClick);
     };
   },[graphRef]);
-  
 
+
+  const initPageValues = ["Prevotella intermedia",
+    "Haemophilus influenzae",
+    "Staphylococcus aureus",
+    "Escherichia coli",
+    "Shigella flexneri"];
+  const initPage = () => {
+    if (!initStatus) {
+      setInitStatus(true);
+      let randomIndex = Math.round(Math.random() * (initPageValues.length - 1));
+      onSearch(initPageValues[randomIndex]);
+    }
+  }
+
+  initPage();
   return(
     <div className="body">
       <Header title={match.params.name}></Header>
@@ -139,7 +155,7 @@ const Visualization = ({match, location}) =>{
             <div className="kno-map-en">Knowledge Graph</div>
           </div>
           <div className="kno-map-search">
-            <Search className="kno-map-search-input" 
+            <Search className="kno-map-search-input"
             placeholder="" allowClear
             onSearch={onSearch}
             ></Search>
@@ -149,9 +165,9 @@ const Visualization = ({match, location}) =>{
           </div>
         </div>
         <div className="kno-map-graphin">
-          <Graphin 
-            data={data} 
-            ref={graphRef} 
+          <Graphin
+            data={data}
+            ref={graphRef}
             options={{
               autoPolyEdge: true,
             }}
@@ -162,7 +178,7 @@ const Visualization = ({match, location}) =>{
               },
               animation: true,
             }}>
-            <Toolbar 
+            <Toolbar
             options={options}
             onChange={handleClick} />
           </Graphin>
