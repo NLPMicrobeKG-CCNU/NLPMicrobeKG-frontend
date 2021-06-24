@@ -1,5 +1,5 @@
 import './index.css';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect} from 'react'
 import { Input , Select} from 'antd';
 import Header from '../../component/header'
 import Footer from '../../component/footer'
@@ -45,7 +45,7 @@ const Explore =(props)=>{
             }
             if (initDataLen === mkgInitValues.length) {
                 initData = shuffle(initData);
-                initData.map((value, index) => {
+                initData.forEach((value, index) => {
                     value.key = index;
                 })
                 setData(initData);
@@ -157,12 +157,12 @@ const Explore =(props)=>{
     const initPage = () => {
         if (!initStatus) {
             if(name === "MicrobeKG"){
-                mkgInitValues.map((value, index) => {
+                mkgInitValues.forEach((value) => {
                     fetchData(value, true)
                 });
                 setInitStatus(true);
             } else {
-                mdInitValues.map((value, index) => {
+                mdInitValues.forEach((value) => {
                     fetchData(value, true)
                 });
                 setInitStatus(true);
@@ -178,7 +178,7 @@ const Explore =(props)=>{
             setColumns(column[1])
         }
         setData([])
-    },[type])
+    },[column, type])
 
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
@@ -186,7 +186,10 @@ const Explore =(props)=>{
     const {Search} = Input
     const {Option} = Select
 
-    initPage();
+    useEffect(()=>{
+        initPage();
+    });
+    
     return (
         <div className="body">
             <Header title={name}></Header>

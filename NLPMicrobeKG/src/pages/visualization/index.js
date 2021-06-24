@@ -143,8 +143,10 @@ const Visualization = ({match, location}) =>{
       onSearch(initPageValues[randomIndex]);
     }
   }
-
-  initPage();
+  useEffect(()=>{
+    initPage();
+  },[])
+  
   return(
     <div className="body">
       <Header title={match.params.name}></Header>
